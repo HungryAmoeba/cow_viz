@@ -1,5 +1,5 @@
 numpy>=1.5.1
 scipy
 matplotlib
+networkx
 bpy
-
