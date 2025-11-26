@@ -205,3 +205,4 @@ def find_blender_executable() -> str:
     if sys.platform == "win32":
         return "C:\\Program Files\\Blender Foundation\\Blender\\blender.exe"
     raise OSError("Unsupported OS for Blender execution")
+    

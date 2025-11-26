@@ -53,3 +53,4 @@ def visualize_dynamics(
 
     visualizer = create_visualizer(config)
     return visualizer.visualize(pos, ori=ori, save_path=save_path, **kwargs)
+    

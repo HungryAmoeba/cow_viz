@@ -235,3 +235,4 @@ def animate_temporal_graph(
     ani = FuncAnimation(fig, update, frames=T, interval=interval, blit=False)
     plt.close()
     return ani
+    

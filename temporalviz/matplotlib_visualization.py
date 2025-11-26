@@ -130,3 +130,4 @@ class MatplotlibVisualizer(BaseVisualizer):
             fps = int(max(1, 1000 // int(interval)))
             anim.save(save_path, writer="ffmpeg", fps=fps, extra_args=["-vcodec", "libx264"])
         return anim
+        

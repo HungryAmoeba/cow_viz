@@ -70,3 +70,4 @@ def create_visualizer(config: Union[str, Dict[str, Any], VisualizerConfig, None]
         return BlenderVisualizer(cfg)
 
     raise ValueError(f"Unknown backend '{backend}'. Supported: 'matplotlib', 'blender'.")
+    
