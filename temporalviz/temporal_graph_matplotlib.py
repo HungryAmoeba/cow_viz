@@ -130,20 +130,30 @@ def animate_temporal_graph(
                 )
             edge_lines.append(line)
 
-    # Orientation arrows in 2D only (simple quiver)
+    # Orientation arrows (2D quiver; optional 3D quiver)
     quivers = None
-    if ori is not None and D == 2:
-        # scale quivers to half the min nonzero distance at t=0
+    if ori is not None:
         p0 = pos[0]
-        diffs = p0[:, None, :] - p0[None, :, :]
-        d2 = np.sum(diffs**2, axis=-1)
-        d2[np.eye(N, dtype=bool)] = np.inf
-        arrow_len = 0.5 * float(np.sqrt(np.min(d2))) if np.isfinite(d2).any() else 0.1
-        quivers = ax.quiver(
-            pos[0, :, 0], pos[0, :, 1],
-            ori[0, :, 0], ori[0, :, 1],
-            color="red", scale_units="xy", scale=1.0 / max(arrow_len, 1e-9), zorder=1,
-        )
+        if D == 2:
+            # scale quivers to half the min nonzero distance at t=0
+            diffs = p0[:, None, :] - p0[None, :, :]
+            d2 = np.sum(diffs**2, axis=-1)
+            d2[np.eye(N, dtype=bool)] = np.inf
+            arrow_len = 0.5 * float(np.sqrt(np.min(d2))) if np.isfinite(d2).any() else 0.1
+            quivers = ax.quiver(
+                p0[:, 0], p0[:, 1],
+                ori[0, :, 0], ori[0, :, 1],
+                color="red", scale_units="xy", scale=1.0 / max(arrow_len, 1e-9), zorder=1,
+            )
+        else:
+            # 3D quiver: choose length proportional to cloud size
+            span = float(np.max(np.linalg.norm(p0 - p0.mean(axis=0), axis=1) + 1e-9))
+            qlen = 0.3 * (span if np.isfinite(span) and span > 0 else 1.0)
+            quivers = ax.quiver(
+                p0[:, 0], p0[:, 1], p0[:, 2],
+                ori[0, :, 0], ori[0, :, 1], ori[0, :, 2],
+                length=qlen, normalize=True, color="red",
+            )
 
     # Edge opacity setup
     if edge_opacity_by_distance:
@@ -176,6 +186,7 @@ def animate_temporal_graph(
                     pass
 
     def update(frame):
+        nonlocal quivers
         # positions
         if D == 2:
             scat.set_offsets(pos[frame])
@@ -200,9 +211,23 @@ def animate_temporal_graph(
         _update_edges(frame)
 
         # orientations
-        if ori is not None and quivers is not None and D == 2:
-            quivers.set_offsets(pos[frame])
-            quivers.set_UVC(ori[frame, :, 0], ori[frame, :, 1])
+        if ori is not None and quivers is not None:
+            if D == 2:
+                quivers.set_offsets(pos[frame])
+                quivers.set_UVC(ori[frame, :, 0], ori[frame, :, 1])
+            else:
+                # Recreate 3D quiver each frame (mpl 3D quiver lacks simple setters)
+                try:
+                    quivers.remove()
+                except Exception:
+                    pass
+                span = float(np.max(np.linalg.norm(pos[frame] - pos[frame].mean(axis=0), axis=1) + 1e-9))
+                qlen = 0.3 * (span if np.isfinite(span) and span > 0 else 1.0)
+                quivers = ax.quiver(
+                    pos[frame, :, 0], pos[frame, :, 1], pos[frame, :, 2],
+                    ori[frame, :, 0], ori[frame, :, 1], ori[frame, :, 2],
+                    length=qlen, normalize=True, color="red",
+                )
 
         ax.set_title(f"{title or 'Temporal Graph'}\nFrame {frame+1}/{T}")
         return (scat,)

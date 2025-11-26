@@ -1,11 +1,47 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.black]
 target-version = ["py38"]
 
-# pyproject.toml
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--failed-first"
+
+[project]
+name = "temporalviz"
+version = "0.1.dev0"
+description = "Visualization of temporal particle and graph data with Matplotlib and optional Blender backends"
+readme = "README.rst"
+requires-python = ">=3.9"
+authors = [{ name = "Charles Xu", email = "charlsxu@mit.edu" }]
+license = { file = "LICENSE" }
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = ["numpy>=1.19", "matplotlib", "networkx"]
+
+[project.optional-dependencies]
+blender = ["bpy"]
+
+[project.urls]
+Homepage = "https://github.com/HungryAmoeba/cow_viz"
+Documentation = "https://hungryamoeba.github.io/cow_viz/"
+Source = "https://github.com/HungryAmoeba/cow_viz"
+Issues = "https://github.com/HungryAmoeba/cow_viz/issues"
+
+[project.scripts]
+temporalviz-examples = "temporalviz.cli:run_examples"
+
+[tool.setuptools.packages.find]
+include = ["temporalviz*"]
+exclude = ["temporalviz.tests*"]

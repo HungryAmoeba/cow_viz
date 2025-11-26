@@ -250,3 +250,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# leave out example outputs
+examples/output

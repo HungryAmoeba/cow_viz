@@ -5,6 +5,8 @@
     :maxdepth: 2
     :caption: Contents:
 
+    usage
+    examples
     packages/modules
     changelog
     py-modindex

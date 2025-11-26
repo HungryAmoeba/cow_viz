@@ -167,6 +167,7 @@ def setup(app):
 extensions = [
     "myst_parser",  # Support markdown
     "sphinx.ext.autodoc",
+    "sphinx_autodoc_typehints",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
     "sphinx.ext.coverage",
