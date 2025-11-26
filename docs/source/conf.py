@@ -118,32 +118,36 @@ def auto_convert_readme(_):
                 os.remove(tmp_path)
 
     elif os.path.isfile(readme_path_md):
-        # Otherwise, if README.md exists convert it to markdown using pandoc
-        import pypandoc
-
-        # Download pandoc if necessary. If pandoc is already installed and on
-        # the PATH, the installed version will be used. Otherwise, we will
-        # download a copy of pandoc into docs/bin/ and add that to our PATH.
-        pandoc_dir = os.path.join(DOCS_DIR, "bin")
-        os.environ["PATH"] += os.pathsep + pandoc_dir
-        pypandoc.ensure_pandoc_installed(
-            quiet=True,
-            targetfolder=pandoc_dir,
-            delete_installer=True,
-        )
-        # Call pandoc using the pypandoc wrapper
-        tmp_path = tempfile.mktemp(dir=output_dir)
+        # Otherwise, if README.md exists convert it to rST via pandoc if available
         try:
-            pypandoc.convert_file(
-                readme_path_md,  # Source file
-                "rst",  # to rST
-                format="gfm",  # from GitHub-Flavored Markdown
-                outputfile=tmp_path,  # Output file
+            import pypandoc
+        except Exception:
+            # Skip conversion if pypandoc is unavailable; docs can proceed without it
+            return
+        else:
+            # Download pandoc if necessary. If pandoc is already installed and on
+            # the PATH, the installed version will be used. Otherwise, we will
+            # download a copy of pandoc into docs/bin/ and add that to our PATH.
+            pandoc_dir = os.path.join(DOCS_DIR, "bin")
+            os.environ["PATH"] += os.pathsep + pandoc_dir
+            pypandoc.ensure_pandoc_installed(
+                quiet=True,
+                targetfolder=pandoc_dir,
+                delete_installer=True,
             )
-            os.replace(tmp_path, readme_path_output)
-        finally:
-            if os.path.islink(tmp_path):
-                os.remove(tmp_path)
+            # Call pandoc using the pypandoc wrapper
+            tmp_path = tempfile.mktemp(dir=output_dir)
+            try:
+                pypandoc.convert_file(
+                    readme_path_md,  # Source file
+                    "rst",  # to rST
+                    format="gfm",  # from GitHub-Flavored Markdown
+                    outputfile=tmp_path,  # Output file
+                )
+                os.replace(tmp_path, readme_path_output)
+            finally:
+                if os.path.islink(tmp_path):
+                    os.remove(tmp_path)
 
 
 def setup(app):
@@ -177,10 +181,12 @@ extensions = [
     "sphinx.ext.napoleon",
 ]
 
-# Some extension features only available on later Python versions
-if sys.version_info >= (3, 6):
-    # Enables search as you type with Elasticsearch on readthedocs.com
-    # but only available on Python 3.6 and above.
+# Optionally enable RTD search if extension is available
+try:
+    import sphinx_search  # noqa: F401
+except Exception:
+    pass
+else:
     extensions.append("sphinx_search.extension")
 
 # Napoleon settings
