@@ -272,6 +272,9 @@ else:
 # Output file base name for HTML help builder.
 htmlhelp_basename = project + "doc"
 
+# Mock optional heavy modules during autodoc (avoid requiring Blender on docs CI)
+autodoc_mock_imports = ["bpy", "mathutils"]
+
 
 # -- Options for LaTeX output ------------------------------------------------
 
