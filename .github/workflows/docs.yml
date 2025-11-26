@@ -24,6 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -U pip
+          pip install --prefer-binary -e .
           pip install --prefer-binary -r docs/requirements.txt
       - name: Build docs
         run: |

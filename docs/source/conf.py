@@ -17,6 +17,8 @@ import os
 import sys
 import tempfile
 from inspect import getsourcefile
+import runpy
+import types
 
 DOCS_SOURCE_DIR = os.path.dirname(os.path.abspath(getsourcefile(lambda: 0)))
 DOCS_DIR = os.path.dirname(DOCS_SOURCE_DIR)
@@ -24,7 +26,9 @@ REPO_DIR = os.path.dirname(DOCS_DIR)
 
 sys.path.insert(0, REPO_DIR)
 
-from temporalviz import __meta__ as meta  # noqa: E402 isort:skip
+# Load project metadata without importing the package (avoids heavy deps at import time)
+_meta_ns = runpy.run_path(os.path.join(REPO_DIR, "temporalviz", "__meta__.py"))
+meta = types.SimpleNamespace(**_meta_ns)  # has: name, path, version, author, description, etc.
 
 
 # -- Project information -----------------------------------------------------
