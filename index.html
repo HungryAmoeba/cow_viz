@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>&lt;no title&gt; &#8212; temporalviz 0.1.dev0 documentation</title>
+    <title>Install &#8212; temporalviz 0.1.dev0 documentation</title>
   
   
   
@@ -308,11 +308,29 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1><no title></h1>
+    <h1>Install</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Install</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#cli">CLI</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#graphs-matplotlib">Graphs (Matplotlib)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#blender-backend-optional">Blender backend (optional)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-blender-options">Advanced Blender options</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog">Changelog</a></li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -322,7 +340,125 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="toctree-wrapper compound">
+  <p>Scientific temporal visualization with Matplotlib and optional Blender backends.</p>
+<ul class="simple">
+<li><p><strong>Matplotlib backend</strong>: fast, headless-friendly animations (2D/3D, quivers, graphs)</p></li>
+<li><p><strong>Blender backend (optional)</strong>: high‑fidelity 3D renders via Blender</p></li>
+</ul>
+<section id="install">
+<h1>Install<a class="headerlink" href="#install" title="Link to this heading">#</a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>temporalviz
+</pre></div>
+</div>
+<p>With Blender extras:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;temporalviz[blender]&quot;</span>
+</pre></div>
+</div>
+<p>From source:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>pip
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="quick-start">
+<h1>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">temporalviz</span><span class="w"> </span><span class="kn">import</span> <span class="n">visualize_dynamics</span>
+
+<span class="c1"># Brownian motion in 2D</span>
+<span class="n">T</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Save an animation (Matplotlib) - requires ffmpeg installed</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">visualize_dynamics</span><span class="p">(</span><span class="s2">&quot;matplotlib&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;out.mp4&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="cli">
+<h1>CLI<a class="headerlink" href="#cli" title="Link to this heading">#</a></h1>
+<p>Run built-in examples:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>temporalviz-examples<span class="w"> </span>brownian<span class="w"> </span>--save<span class="w"> </span>out.mp4
+temporalviz-examples<span class="w"> </span>graph
+</pre></div>
+</div>
+</section>
+<section id="api">
+<h1>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h1>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">temporalviz.create_visualizer(config)</span></code> → returns a visualizer instance
+- <code class="docutils literal notranslate"><span class="pre">config</span></code> may be <code class="docutils literal notranslate"><span class="pre">&quot;matplotlib&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;blender&quot;</span></code> or a dict such as</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">{&quot;backend&quot;:</span> <span class="pre">&quot;matplotlib&quot;,</span> <span class="pre">&quot;interval&quot;:</span> <span class="pre">40}</span></code></p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">temporalviz.visualize_dynamics(config,</span> <span class="pre">pos,</span> <span class="pre">ori=None,</span> <span class="pre">save_path=None,</span> <span class="pre">**kwargs)</span></code>
+- <code class="docutils literal notranslate"><span class="pre">pos</span></code> shape <code class="docutils literal notranslate"><span class="pre">(T,</span> <span class="pre">N,</span> <span class="pre">D)</span></code> with <code class="docutils literal notranslate"><span class="pre">D</span> <span class="pre">∈</span> <span class="pre">{2,</span> <span class="pre">3}</span></code>
+- <code class="docutils literal notranslate"><span class="pre">ori</span></code> optional: <code class="docutils literal notranslate"><span class="pre">(T,</span> <span class="pre">N,</span> <span class="pre">D)</span></code> direction vectors or <code class="docutils literal notranslate"><span class="pre">(T,</span> <span class="pre">N,</span> <span class="pre">4)</span></code> quaternions (w,x,y,z)</p></li>
+</ul>
+</section>
+<section id="graphs-matplotlib">
+<h1>Graphs (Matplotlib)<a class="headerlink" href="#graphs-matplotlib" title="Link to this heading">#</a></h1>
+<p>Overlay edges using a <code class="docutils literal notranslate"><span class="pre">networkx</span></code> graph:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="o">,</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">temporalviz</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_visualizer</span>
+
+<span class="n">T</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">16</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">pos</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">pos</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
+
+<span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">path_graph</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">viz</span> <span class="o">=</span> <span class="n">create_visualizer</span><span class="p">({</span><span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="s2">&quot;matplotlib&quot;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="mi">40</span><span class="p">})</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">viz</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="blender-backend-optional">
+<h1>Blender backend (optional)<a class="headerlink" href="#blender-backend-optional" title="Link to this heading">#</a></h1>
+<p>Exports trajectories to a temp file and invokes Blender headless for rendering.
+Ensure Blender is installed; set the executable if needed (macOS example shown):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">temporalviz</span><span class="w"> </span><span class="kn">import</span> <span class="n">visualize_dynamics</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="s2">&quot;blender&quot;</span><span class="p">,</span> <span class="s2">&quot;fps&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
+       <span class="s2">&quot;blender_exec&quot;</span><span class="p">:</span> <span class="s2">&quot;/Applications/Blender.app/Contents/MacOS/Blender&quot;</span><span class="p">}</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">visualize_dynamics</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;render.mp4&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="advanced-blender-options">
+<h1>Advanced Blender options<a class="headerlink" href="#advanced-blender-options" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">primitive_shape</span></code>: <code class="docutils literal notranslate"><span class="pre">&quot;sphere&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;cone&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;cube&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">primitive_color</span></code>: <code class="docutils literal notranslate"><span class="pre">[R,</span> <span class="pre">G,</span> <span class="pre">B]</span></code> in [0,1] (static); or pass <code class="docutils literal notranslate"><span class="pre">node_colors</span></code> arrays</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">node_colors</span></code>: <code class="docutils literal notranslate"><span class="pre">(T,N,3/4)</span></code> or <code class="docutils literal notranslate"><span class="pre">(N,3/4)</span></code> for per-frame/per-node colors</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">node_sizes</span></code>: <code class="docutils literal notranslate"><span class="pre">(T,N)</span></code> or <code class="docutils literal notranslate"><span class="pre">(N,)</span></code> for per-frame/per-node sizes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ori</span></code>: <code class="docutils literal notranslate"><span class="pre">(T,N,3)</span></code> direction vectors (auto-aligned) or <code class="docutils literal notranslate"><span class="pre">(T,N,4)</span></code> quaternions (w,x,y,z)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">graph</span></code>: <code class="docutils literal notranslate"><span class="pre">networkx</span></code> graph or edge array <code class="docutils literal notranslate"><span class="pre">(E,2)</span></code>; edges are animated in 3D</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">edge_bevel</span></code>: curve thickness for edges (e.g., <code class="docutils literal notranslate"><span class="pre">0.015</span></code>)</p></li>
+</ul>
+</section>
+<section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/brownian_motion.py</span></code>: 2D Brownian motion (MP4 in <code class="docutils literal notranslate"><span class="pre">examples/output/</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/path_graph_wiggle.py</span></code>: path graph wiggle (MP4 in <code class="docutils literal notranslate"><span class="pre">examples/output/</span></code>)</p></li>
+<li><p>Blender demos in <code class="docutils literal notranslate"><span class="pre">examples/</span></code> (require Blender)</p></li>
+</ul>
+</section>
+<section id="testing">
+<h1>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the test suite (uses a headless Matplotlib backend)</span>
+<span class="nv">MPLBACKEND</span><span class="o">=</span>Agg<span class="w"> </span>pytest<span class="w"> </span>-q
+</pre></div>
+</div>
+</section>
+<section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<p>See <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code>.</p>
+<div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
@@ -353,6 +489,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
 </ul>
 </div>
+</section>
 
 
                 </article>
@@ -380,6 +517,31 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Install</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#cli">CLI</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#graphs-matplotlib">Graphs (Matplotlib)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#blender-backend-optional">Blender backend (optional)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-blender-options">Advanced Blender options</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog">Changelog</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>
