@@ -54,9 +54,9 @@ def run_apidoc(_):
     """
     Call apidoc, with customised set up.
     """
-    ignore_paths = [
-        os.path.join("..", project_path, "tests"),
-    ]
+    # Absolute paths for reliability in CI
+    package_src = os.path.join(REPO_DIR, project_path)
+    ignore_paths = [os.path.join(package_src, "tests")]
 
     argv = [
         "--force",  # Overwrite output files
@@ -65,7 +65,7 @@ def run_apidoc(_):
         "--module-first",  # Put module documentation before submodule
         "-o",
         os.path.join(DOCS_SOURCE_DIR, "packages"),  # Output path
-        os.path.join("..", project_path),
+        package_src,
     ] + ignore_paths
 
     try:
@@ -249,7 +249,12 @@ html_theme = "sphinx_book_theme"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
+_static_dir = os.path.join(DOCS_SOURCE_DIR, "_static")
+if not os.path.isdir(_static_dir):
+    # Avoid warning if _static does not exist
+    html_static_path = []
+else:
+    html_static_path = ["_static"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
